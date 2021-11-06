@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { Product } from '../core/product';
+import { Expenses } from '../core/expenses';
 
 @Component({
   selector: 'app-expenses',
@@ -12,10 +12,9 @@ export class ExpensesPage implements OnInit {
 
   expensesForm:FormGroup;
   typeOffForm:FormGroup;
-  expenses:Array<Product>;
+  expenses:Expenses = new Expenses();
   total:number = 0;
   realTotal:number = 0;
-  off:number = 0;
 
   constructor(private formbuilder:FormBuilder,
     private storage:Storage) { 
@@ -39,38 +38,44 @@ export class ExpensesPage implements OnInit {
 
   public ngOnInit() { 
     this.storage.create();
-    this.storage.get("expends")
+    this.storage.get("expenses")
     .then(value => {
       if(value != null) { 
         this.expenses = value;
         this.calculateInitialTotal();
       }
       else
-        this.expenses = new Array();
+        this.expenses = new Expenses();
     })
     .catch(()=>{
-      this.expenses = new Array();
+      this.expenses = new Expenses();
     })
 
 
   }
 
   public addExpenses(valueForm) {
-    this.expenses.push(valueForm);
+    this.expenses.products.push(valueForm);
+
     this.expensesForm.controls.price.setValue(null);
     this.expensesForm.controls.description.setValue(null);
     
     this.plusTotal(valueForm.price);
-
-    this.storage.create();
-    this.storage.set("expends",this.expenses);
   }
 
   public typeOff(typeOffForm) {
-
-    this.off = typeOffForm.off;
-
+    this.expenses.off = typeOffForm.off;
     this.plusTotal(0);
+  }
+
+  public clearTypeOff() {
+    this.expenses.off = 0;
+    this.realTotal = this.total;
+  }
+
+  public saveExpenses() {
+    this.storage.create();
+    this.storage.set("expenses",this.expenses);
   }
 
   /***PRIVATE***/
@@ -82,18 +87,25 @@ export class ExpensesPage implements OnInit {
   }
 
   private calculateOff(applyOff:number) {
-    return this.off != 0
-            ? (this.off * applyOff) /100 
-            : applyOff;
+    return this.expenses.off != 0
+            ? (this.expenses.off * applyOff) /100 
+            : 0;
   }
 
   private calculateInitialTotal() {
 
-    this.expenses.forEach(item => {
+    this.expenses.products.forEach(item => {
       this.total += item.price;
     });
 
-    this.realTotal = this.total;
+
+    if(this.expenses.off > 0) {
+      this.typeOffForm.controls.off.setValue(this.expenses.off);
+      this.plusTotal(0);
+    }
+    else
+      this.realTotal = this.total;
+
   }
 
 }

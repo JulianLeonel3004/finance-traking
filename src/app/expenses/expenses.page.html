@@ -23,20 +23,21 @@
             </ion-input>
           </ion-item>
 
-          <ion-button type="submit" expand="full" [disabled]="!typeOffForm.valid">Agregar descuento</ion-button>
+          <ion-button type="submit" expand="full" [disabled]="!typeOffForm.valid || expenses.off > 0">Agregar descuento</ion-button>
+          <ion-button expand="full" [disabled]="off == 0" (click)="clearTypeOff()">Deshacer descuento</ion-button>
         </form>
 
       </ion-card-title>
     </ion-card-content>
   </ion-card>
 
-  <ion-grid *ngFor="let expens of expenses">
+  <ion-grid *ngFor="let product of this.expenses.products">
     <ion-row>
       <ion-col size="6">
-        {{expens.price}}
+        {{product.price}}
       </ion-col>
       <ion-col>
-        {{expens.description}}
+        {{product.description}}
       </ion-col>
     </ion-row>
   
@@ -64,5 +65,6 @@
 
     
     <ion-button type="submit" expand="full" [disabled]="!expensesForm.valid">Cargar</ion-button>
+    <ion-button expand="full" [disabled]="total == 0" (click)="saveExpenses()">Guardar</ion-button>
   </form>
 </ion-content>

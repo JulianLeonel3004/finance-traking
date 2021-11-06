@@ -8,13 +8,13 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Total = {{total}}</ion-card-title>
+      <ion-card-title>Total = {{realTotal}}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <ion-card-title>
 
-        <form [formGroup]="typeOffForm" (ngSubmit)="typeOff()">
+        <form [formGroup]="typeOffForm" (ngSubmit)="typeOff(typeOffForm.value)">
           <ion-item>
             <ion-label>
               Descuento

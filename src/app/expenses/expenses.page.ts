@@ -14,6 +14,7 @@ export class ExpensesPage implements OnInit {
   typeOffForm:FormGroup;
   expenses:Array<Product>;
   total:number = 0;
+  realTotal:number = 0;
   off:number = 0;
 
   constructor(private formbuilder:FormBuilder,
@@ -36,7 +37,7 @@ export class ExpensesPage implements OnInit {
     });
   }
 
-  ngOnInit() { 
+  public ngOnInit() { 
     this.storage.create();
     this.storage.get("expends")
     .then(value => {
@@ -54,7 +55,7 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  addExpenses(valueForm) {
+  public addExpenses(valueForm) {
     this.expenses.push(valueForm);
     this.expensesForm.controls.price.setValue(null);
     this.expensesForm.controls.description.setValue(null);
@@ -65,27 +66,34 @@ export class ExpensesPage implements OnInit {
     this.storage.set("expends",this.expenses);
   }
 
-  plusTotal(price:number) {
-    this.total += this.calculateOff(price);
+  public typeOff(typeOffForm) {
+
+    this.off = typeOffForm.off;
+
+    this.plusTotal(0);
   }
 
-  calculateInitialTotal() {
-    this.total = 0;
+  /***PRIVATE***/
+
+  private plusTotal(price:number) {
+    this.total += price;
+    
+    this.realTotal = this.total - this.calculateOff(this.total);
+  }
+
+  private calculateOff(applyOff:number) {
+    return this.off != 0
+            ? (this.off * applyOff) /100 
+            : applyOff;
+  }
+
+  private calculateInitialTotal() {
 
     this.expenses.forEach(item => {
       this.total += item.price;
     });
-  }
 
-  typeOff() {
-
-    this.off = this.typeOffForm.controls.off.value;
-
-    this.total -= this.total - this.calculateOff(this.total);
-  }
-
-  calculateOff(applyOff:number) {
-    return (this.off * applyOff) /100;
+    this.realTotal = this.total;
   }
 
 }

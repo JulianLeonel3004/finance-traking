@@ -13,7 +13,7 @@ export class HomePage {
   constructor(private navController:NavController) {}
 
   goToExpenses() {
-    this.navController.navigateForward('/expenses');
+    this.navController.navigateForward('/list-expenses');
   }
 
 }

@@ -12,8 +12,12 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'expenses',
+    path: 'expenses/:name',
     loadChildren: () => import('./expenses/expenses.module').then( m => m.ExpensesPageModule)
+  },
+  {
+    path: 'list-expenses',
+    loadChildren: () => import('./list-expenses/list-expenses.module').then( m => m.ListExpensesPageModule)
   },
 ];
 

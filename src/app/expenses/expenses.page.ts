@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { Expenses } from '../core/expenses';
 
@@ -15,9 +16,11 @@ export class ExpensesPage implements OnInit {
   expenses:Expenses = new Expenses();
   total:number = 0;
   realTotal:number = 0;
+  expensesList:Array<Expenses>;
 
   constructor(private formbuilder:FormBuilder,
-    private storage:Storage) { 
+    private storage:Storage,
+    private router:ActivatedRoute) { 
 
     this.expensesForm = this.formbuilder.group({
       price: new FormControl("", Validators.compose([
@@ -37,15 +40,34 @@ export class ExpensesPage implements OnInit {
   }
 
   public ngOnInit() { 
+    let name:string = this.router.snapshot.params.name;
+    console.log(name)
+
     this.storage.create();
-    this.storage.get("expenses")
-    .then(value => {
-      if(value != null) { 
-        this.expenses = value;
-        this.calculateInitialTotal();
+    this.storage.get("expensesList")
+    .then((list:Array<any>) => {
+      if(!list){
+        this.expenses = new Expenses(name);
+        this.expensesList =  new Array<Expenses>();
+        this.expensesList.push(this.expenses);
+
+        this.storage.set("expensesList", this.expensesList);
       }
-      else
-        this.expenses = new Expenses();
+      else {
+        this.expensesList = list;
+        let index = this.expensesList.findIndex(item => item.name == name);
+        if(index < 0){
+          this.expenses = new Expenses(name);
+          this.expensesList.push(this.expenses);
+          this.storage.set("expensesList", this.expensesList);
+        }
+        else{
+          this.expenses = this.expensesList[index];
+          this.calculateInitialTotal();
+        }
+      }
+      
+      
     })
     .catch(()=>{
       this.expenses = new Expenses();
@@ -75,7 +97,11 @@ export class ExpensesPage implements OnInit {
 
   public saveExpenses() {
     this.storage.create();
-    this.storage.set("expenses",this.expenses);
+    let index = this.expensesList.findIndex(item => item.name === this.expenses.name);
+    this.expensesList[index] = this.expenses;
+
+    this.storage.set("expensesList",this.expensesList);
+
   }
 
   /***PRIVATE***/

@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Gastos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="expensesForm" (ngSubmit)="addExpenses(expensesForm.value)">
+
+    <ion-item>
+      <ion-label>
+        Precio
+      </ion-label>
+      <ion-input formControlName="price" type=number>
+
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        Descripción
+      </ion-label>
+      <ion-input formControlName="description">
+
+      </ion-input>
+    </ion-item>
+
+    
+    <ion-button type="submit" expand="full" [disabled]="!expensesForm.valid">Cargar</ion-button>
+  </form>
+</ion-content>

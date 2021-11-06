@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,12 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  total:number = 15093;
+
+  constructor(private navController:NavController) {}
+
+  goToExpenses() {
+    this.navController.navigateForward('/expenses');
+  }
 
 }

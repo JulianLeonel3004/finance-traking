@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "financeTraking",
-	"webDir": "www",
-	"bundledWebRuntime": false
+  "appId": "finance.traking.com",
+  "appName": "financeTraking",
+  "webDir": "www",
+  "bundledWebRuntime": false
 }

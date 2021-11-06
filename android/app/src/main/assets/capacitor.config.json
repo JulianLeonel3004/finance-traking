@@ -1,0 +1,6 @@
+{
+	"appId": "finance.traking.com",
+	"appName": "financeTraking",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

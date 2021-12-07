@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 const routes: Routes = [
   {
-    path: 'home',
+    path: environment.routes.home,
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
     path: '',
-    redirectTo: 'list-expenses',
+    redirectTo: environment.routes.list_expenses,
     pathMatch: 'full'
   },
   {
-    path: 'expenses/:name',
+    path: environment.routes.expenses + '/:name',
     loadChildren: () => import('./expenses/expenses.module').then( m => m.ExpensesPageModule)
   },
   {
-    path: 'list-expenses',
+    path: environment.routes.list_expenses,
     loadChildren: () => import('./list-expenses/list-expenses.module').then( m => m.ListExpensesPageModule)
   },
 ];

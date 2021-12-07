@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
 import { Expenses } from '../core/expenses';
 import { Storage } from '@ionic/storage';
 import { Router, RouterLink } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-expenses',
@@ -28,7 +28,7 @@ export class ListExpensesPage implements OnInit {
 
   ngOnInit() {
     this.storage.create();
-    this.storage.get("expensesList")
+    this.storage.get(environment.tables.expensesList)
     .then( list => {
       if(list == null)
         this.expensesList = new Array();
@@ -45,8 +45,9 @@ export class ListExpensesPage implements OnInit {
   }
 
   goToExpenses(name) {
-    this.route.navigateByUrl('expenses/' + name);
+    this.route.navigateByUrl(environment.routes.expenses +'/' + name);
   }
- 
+  
+  
 
 }

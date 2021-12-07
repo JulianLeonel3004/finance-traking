@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  tables: {
+    expensesList: "expensesList"
+  },
+  routes:{
+    expenses:"expenses",
+    list_expenses:"list-expenses",
+    home:"home"
+  }
 };
 
 /*

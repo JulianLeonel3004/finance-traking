@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { environment } from 'src/environments/environment';
 import { Expenses } from '../core/expenses';
 
 @Component({
@@ -20,7 +21,8 @@ export class ExpensesPage implements OnInit {
 
   constructor(private formbuilder:FormBuilder,
     private storage:Storage,
-    private router:ActivatedRoute) { 
+    private router:ActivatedRoute,
+    private route:Router) { 
 
     this.expensesForm = this.formbuilder.group({
       price: new FormControl("", Validators.compose([
@@ -41,17 +43,16 @@ export class ExpensesPage implements OnInit {
 
   public ngOnInit() { 
     let name:string = this.router.snapshot.params.name;
-    console.log(name)
-
+    
     this.storage.create();
-    this.storage.get("expensesList")
+    this.storage.get(environment.tables.expensesList)
     .then((list:Array<any>) => {
       if(!list){
         this.expenses = new Expenses(name);
         this.expensesList =  new Array<Expenses>();
         this.expensesList.push(this.expenses);
 
-        this.storage.set("expensesList", this.expensesList);
+        this.storage.set(environment.tables.expensesList, this.expensesList);
       }
       else {
         this.expensesList = list;
@@ -59,7 +60,7 @@ export class ExpensesPage implements OnInit {
         if(index < 0){
           this.expenses = new Expenses(name);
           this.expensesList.push(this.expenses);
-          this.storage.set("expensesList", this.expensesList);
+          this.storage.set(environment.tables.expensesList, this.expensesList);
         }
         else{
           this.expenses = this.expensesList[index];
@@ -100,7 +101,7 @@ export class ExpensesPage implements OnInit {
     let index = this.expensesList.findIndex(item => item.name === this.expenses.name);
     this.expensesList[index] = this.expenses;
 
-    this.storage.set("expensesList",this.expensesList);
+    this.storage.set(environment.tables.expensesList,this.expensesList);
 
   }
 

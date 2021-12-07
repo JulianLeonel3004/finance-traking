@@ -4,6 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-fab vertical="top" horizontal="center" slot="fixed">
+  <ion-fab-button>
+    <ion-icon name="reload" (click)="ngOnInit()"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
 <ion-content>
   <ion-card>
     <ion-card-content>

@@ -33,9 +33,16 @@
 
 
   <ion-card *ngFor="let expenses of expensesList">
-    <ion-card-header>
-      <ion-card-title (click)="goToExpenses(expenses.name)">{{expenses.name}}</ion-card-title>
-    </ion-card-header>
+    <ion-item>
+
+      <ion-card-header (click)="goToExpenses(expenses.name)">
+        <ion-card-title>{{expenses.name}}</ion-card-title>
+      </ion-card-header>
+      <ion-button slot="end" (click)="delete(expenses.name)">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+      
+    </ion-item>
   </ion-card>
 
 </ion-content>

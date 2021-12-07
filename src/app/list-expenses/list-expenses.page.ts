@@ -48,6 +48,18 @@ export class ListExpensesPage implements OnInit {
     this.route.navigateByUrl(environment.routes.expenses +'/' + name);
   }
   
+
+  delete(name) {
+    
+    if(confirm("Está seguro que quiere eliminar")) {
+      let expList = this.expensesList.filter(expenses => expenses.name != name);
+
+      this.storage.create();
+      this.storage.set(environment.tables.expensesList, expList);
+
+      this.expensesList = expList;
+    }
+  }
   
 
 }

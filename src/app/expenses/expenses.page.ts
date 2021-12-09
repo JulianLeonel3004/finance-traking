@@ -18,6 +18,7 @@ export class ExpensesPage implements OnInit {
   total:number = 0;
   realTotal:number = 0;
   expensesList:Array<Expenses>;
+  indexExpenses:number;
 
   constructor(private formbuilder:FormBuilder,
     private storage:Storage,
@@ -58,11 +59,13 @@ export class ExpensesPage implements OnInit {
         this.expensesList = list;
         let index = this.expensesList.findIndex(item => item.name == name);
         if(index < 0){
+          this.indexExpenses = 0;
           this.expenses = new Expenses(name);
           this.expensesList.push(this.expenses);
           this.storage.set(environment.tables.expensesList, this.expensesList);
         }
         else{
+          this.indexExpenses = index;
           this.expenses = this.expensesList[index];
           this.calculateInitialTotal();
         }
@@ -105,6 +108,30 @@ export class ExpensesPage implements OnInit {
 
   }
 
+  public delete(indexProduct) {
+    let count = 0;
+    let products = new Array();
+
+    this.expensesList[this.indexExpenses].products
+    .forEach(item => {
+      if(count != indexProduct){
+        products.push(item);
+      }
+      count++;
+    });
+
+    this.expensesList[this.indexExpenses].products = products;
+    
+    this.expenses = this.expensesList[this.indexExpenses];
+
+    this.storage.create();
+    this.storage.set(environment.tables.expensesList, this.expensesList);
+
+
+    this.calculateInitialTotal();
+   
+  }
+
   /***PRIVATE***/
 
   private plusTotal(price:number) {
@@ -120,7 +147,7 @@ export class ExpensesPage implements OnInit {
   }
 
   private calculateInitialTotal() {
-
+    this.total = 0;
     this.expenses.products.forEach(item => {
       this.total += item.price;
     });

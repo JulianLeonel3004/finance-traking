@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Expenses } from '../core/expenses';
 import { Storage } from '@ionic/storage';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -49,16 +49,26 @@ export class ListExpensesPage implements OnInit {
   }
   
 
-  delete(name) {
+  delete(index) {
+
+    if(!confirm("Está seguro que quiere eliminar"))
+      return;  
+debugger
+    let expList = new Array();
+    let count = 0;
+  
+    this.expensesList.forEach(item => { 
+      if(index != count) {
+        expList.push(item);
+        count++;
+      }
+    })
+
+    this.expensesList = expList;
+
+    this.storage.create();
+    this.storage.set(environment.tables.expensesList, this.expensesList);
     
-    if(confirm("Está seguro que quiere eliminar")) {
-      let expList = this.expensesList.filter(expenses => expenses.name != name);
-
-      this.storage.create();
-      this.storage.set(environment.tables.expensesList, expList);
-
-      this.expensesList = expList;
-    }
   }
   
 

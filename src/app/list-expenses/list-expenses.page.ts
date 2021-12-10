@@ -53,15 +53,15 @@ export class ListExpensesPage implements OnInit {
 
     if(!confirm("Está seguro que quiere eliminar"))
       return;  
-debugger
+
     let expList = new Array();
     let count = 0;
   
     this.expensesList.forEach(item => { 
       if(index != count) {
         expList.push(item);
-        count++;
       }
+      count++;
     })
 
     this.expensesList = expList;
